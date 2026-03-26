@@ -1,0 +1,26 @@
+{
+  "name": "Business Blue",
+  "id": "business-blue",
+  "colors": {
+    "primary": "#1E40AF",
+    "secondary": "#3B82F6",
+    "background": "#F8FAFC",
+    "surface": "#FFFFFF",
+    "textPrimary": "#1E293B",
+    "textSecondary": "#64748B",
+    "border": "#E2E8F0",
+    "success": "#10B981",
+    "warning": "#F59E0B",
+    "error": "#EF4444",
+    "chartColors": ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#EC4899", "#06B6D4", "#84CC16"]
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "headingSizes": {
+      "h1": "2.25rem",
+      "h2": "1.875rem",
+      "h3": "1.5rem",
+      "h4": "1.25rem"
+    }
+  }
+}

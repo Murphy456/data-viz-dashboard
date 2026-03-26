@@ -1,0 +1,26 @@
+{
+  "name": "Vibrant Orange",
+  "id": "vibrant-orange",
+  "colors": {
+    "primary": "#EA580C",
+    "secondary": "#F97316",
+    "background": "#FFFBEB",
+    "surface": "#FFFFFF",
+    "textPrimary": "#1C1917",
+    "textSecondary": "#78716C",
+    "border": "#FED7AA",
+    "success": "#22C55E",
+    "warning": "#EAB308",
+    "error": "#DC2626",
+    "chartColors": ["#F97316", "#06B6D4", "#84CC16", "#EC4899", "#6366F1", "#14B8A6", "#A855F7", "#F43F5E"]
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "headingSizes": {
+      "h1": "2.25rem",
+      "h2": "1.875rem",
+      "h3": "1.5rem",
+      "h4": "1.25rem"
+    }
+  }
+}

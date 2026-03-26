@@ -1,0 +1,26 @@
+{
+  "name": "Dark Theme",
+  "id": "dark-theme",
+  "colors": {
+    "primary": "#60A5FA",
+    "secondary": "#3B82F6",
+    "background": "#0F172A",
+    "surface": "#1E293B",
+    "textPrimary": "#F1F5F9",
+    "textSecondary": "#94A3B8",
+    "border": "#334155",
+    "success": "#34D399",
+    "warning": "#FBBF24",
+    "error": "#F87171",
+    "chartColors": ["#60A5FA", "#34D399", "#FBBF24", "#F87171", "#A78BFA", "#F472B6", "#22D3EE", "#A3E635"]
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "headingSizes": {
+      "h1": "2.25rem",
+      "h2": "1.875rem",
+      "h3": "1.5rem",
+      "h4": "1.25rem"
+    }
+  }
+}

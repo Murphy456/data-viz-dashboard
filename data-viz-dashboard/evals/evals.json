@@ -1,0 +1,70 @@
+{
+  "skill_name": "data-viz-dashboard",
+  "evals": [
+    {
+      "id": 1,
+      "name": "sales-dashboard-basic",
+      "prompt": "帮我创建一个销售数据看板，展示各区域的销售额和同比增长",
+      "expected_output": "React dashboard with KPI cards showing total sales, bar chart comparing regional sales, and line chart showing YoY growth trend",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "value": "BarChart", "description": "Should include bar chart for regional comparison"},
+        {"type": "contains", "value": "KPICard", "description": "Should include KPI cards for total sales"},
+        {"type": "contains", "value": "region", "description": "Should have region dimension"},
+        {"type": "file_exists", "value": "App.tsx", "description": "Must create main App.tsx entry component"},
+        {"type": "file_exists", "value": "mockData.ts", "description": "Should have mock data file"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "marketing-funnel",
+      "prompt": "做一个营销漏斗分析，展示从曝光到转化的各阶段数据",
+      "expected_output": "Dashboard with funnel chart showing conversion stages, KPI cards for conversion rates",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "value": "FunnelChart", "description": "Should include funnel chart"},
+        {"type": "contains", "value": "conversion", "description": "Should mention conversion metrics"},
+        {"type": "contains", "value": "stage", "description": "Should have stage dimension"},
+        {"type": "file_exists", "value": "App.tsx", "description": "Must create main App.tsx entry component"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "product-retention-trend",
+      "prompt": "展示产品用户留存率的月度趋势",
+      "expected_output": "Line chart or area chart showing retention rate over time with proper date axis",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "value": "LineChart", "description": "Should include line chart for trend"},
+        {"type": "contains", "value": "retention", "description": "Should have retention metric"},
+        {"type": "contains", "value": "date", "description": "Should have time dimension"},
+        {"type": "file_exists", "value": "App.tsx", "description": "Must create main App.tsx entry component"},
+        {"type": "file_exists", "value": "LineChart.tsx", "description": "Should generate LineChart component for trend"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "finance-composition",
+      "prompt": "可视化公司各部门预算占比",
+      "expected_output": "Pie or donut chart showing budget allocation by department",
+      "files": [],
+      "assertions": [
+        {"type": "contains", "value": "PieChart", "description": "Should include pie chart for composition"},
+        {"type": "contains", "value": "department", "description": "Should have department dimension"},
+        {"type": "contains", "value": "budget", "description": "Should have budget metric"},
+        {"type": "file_exists", "value": "App.tsx", "description": "Must create main App.tsx entry component"}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "vague-request",
+      "prompt": "帮我看看数据",
+      "expected_output": "Should trigger Socratic dialogue to gather requirements, asking about business domain, metrics, dimensions",
+      "files": [],
+      "assertions": [
+        {"type": "behavior", "value": "asks_questions", "description": "Should ask clarifying questions"},
+        {"type": "behavior", "value": "identifies_domain", "description": "Should attempt to identify business domain"}
+      ]
+    }
+  ]
+}
