@@ -47,6 +47,37 @@ Trigger this skill when users request:
 | Correlation | `ScatterChart.tsx` | Price vs sales, user behavior |
 | KPI summary | `KPICard.tsx` | Total revenue, conversion rate |
 
+## Business Metrics Library
+
+The skill includes a comprehensive metrics library in `references/domain-knowledge.md` covering:
+
+### Supported Industries
+
+| Industry | Core Metrics | Typical Use Cases |
+|----------|--------------|-------------------|
+| Marketing | ROI, CVR, CAC, LTV, ROAS | Campaign performance, channel attribution |
+| Product | DAU/MAU, Retention, NPS | User engagement, feature adoption |
+| Finance | Revenue, Margin, Cash Flow | Financial health, budget tracking |
+| Operations | Throughput, SLA, Defect Rate | Process efficiency, quality control |
+| E-commerce | GMV, AOV, Cart Abandonment | Sales funnel, conversion optimization |
+| SaaS | MRR, ARR, Churn, NRR | Subscription growth, revenue retention |
+| Education | Completion, Engagement, Scores | Learning outcomes, course effectiveness |
+| Healthcare | Wait Time, Readmission, Satisfaction | Patient care, operational efficiency |
+
+### Using the Metrics Library
+
+1. **Domain Detection**: Automatically identify the business domain from user input
+2. **Metric Selection**: Look up relevant metrics with formulas and typical ranges
+3. **Benchmark Reference**: Compare against industry benchmarks for realistic mock data
+4. **Relationship Mapping**: Understand metric dependencies (e.g., CAC → LTV relationship)
+
+### Metric Relationships
+
+The library includes metric relationship diagrams:
+- Marketing Funnel: Impressions → Clicks → Visits → Leads → Customers
+- Product Journey: Acquisition → Activation → Retention → Referral → Revenue
+- SaaS Revenue: New MRR + Expansion - Churn = Net New MRR
+
 ## Core Workflow: 6-Step Guided Process
 
 ### Step 0: Socratic Dialogue (Requirement Gathering)
@@ -108,27 +139,47 @@ interface MockDataSpec {
 - Match metrics to built-in chart templates first
 - Fall back to AI-generated components for complex cases
 
-**Output**: `DesignDoc` (locked) stored as `design-docs/page-*.md`
+**Design Document Generation**:
+After wireframe confirmation, generate a comprehensive design document using `assets/templates/design-doc-template.md`:
+- Save to `design-docs/[dashboard-name].md`
+- Include all 12 sections: Executive Summary, Business Context, Metrics, Components, Layout, Interactions, Data Model, Theme, Technical Specs, Edge Cases, Acceptance Criteria, Approval
+- User must approve before proceeding to development
 
-### Step 3: Execution Plan Generation
+**Output**: `DesignDoc` (locked) stored as `design-docs/[dashboard-name].md`
 
-**Goal**: Create atomic, testable code generation steps.
+### Step 3: Development Plan Generation
+
+**Goal**: Create detailed development plan from design document.
 
 **Process**:
-1. Parse design doc → extract file list
-2. Analyze dependencies → topological sort
-3. Decompose into atomic steps
-4. Generate quantified test specs for each step
-5. Allocate context budget per step
-6. Mark component source (template vs new)
+1. Parse design doc → extract all required files and components
+2. Analyze dependencies → build dependency graph
+3. Break into phases → Foundation, Components, Assembly, QA
+4. Create task breakdown with:
+   - Priority (P0/P1/P2)
+   - Time estimates
+   - Dependencies
+   - Acceptance criteria
+5. Generate timeline with milestones
+6. Define quality gates and rollback points
 
-**Output**: `ExecutionPlan` with ordered steps
+**Development Plan Structure** (from `assets/templates/dev-plan-template.md`):
+- Project Overview
+- Task Breakdown (by phase)
+- Dependency Graph
+- Timeline (Gantt chart)
+- Resource Allocation
+- Risk Assessment
+- Quality Gates
+- Rollback Plan
+
+**Output**: `dev-plan.md` with ordered, testable tasks
 
 ### Step 4: TDD Code Generation
 
-**Goal**: Generate tested, production-ready code automatically.
+**Goal**: Generate tested, production-ready code following the development plan.
 
-**TDD Cycle per Step**:
+**TDD Cycle per Task**:
 ```
 [READ] → [RED: write tests] → [GREEN: write code] → [REFACTOR] → [VERIFY]
 ```
@@ -144,6 +195,11 @@ interface MockDataSpec {
 - ESLint + Prettier + TypeScript clean
 - Design doc consistency check passed
 - No regression in previous steps
+
+**Checkpoint Strategy**:
+- Create checkpoint after each phase
+- Support rollback to any checkpoint
+- Track test results at each checkpoint
 
 **Output**: Complete React project with tests
 
@@ -164,9 +220,16 @@ interface MockDataSpec {
 
 Load domain knowledge and chart mapping rules as needed:
 
-- `references/domain-knowledge.md` - Industry metrics definitions (marketing/product/finance)
+- `references/domain-knowledge.md` - **Business Metrics Library** with 8 industries (Marketing, Product, Finance, Operations, E-commerce, SaaS, Education, Healthcare), metric relationships, and industry benchmarks
 - `references/chart-mapping.md` - Rules for mapping metrics to chart types
 - `references/workflow-guide.md` - Detailed workflow instructions
+
+### Templates
+
+Use templates for document generation:
+
+- `assets/templates/design-doc-template.md` - Comprehensive design document template with approval workflow
+- `assets/templates/dev-plan-template.md` - Development plan with task breakdown, timeline, and dependencies
 
 ### Scripts
 

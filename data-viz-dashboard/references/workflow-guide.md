@@ -292,19 +292,29 @@ Page 2: [Page Name]
 
 ### 2E: Design Document Generation
 
-Generate to local file `design-docs/page-*.md`:
+Generate comprehensive design document using the template:
 
-```markdown
-# Design Document: [Dashboard Name]
+**Template Location**: `assets/templates/design-doc-template.md`
 
-## 1. Data Story Overview
-## 2. Metrics Specification
-## 3. Visualization Components
-## 4. Page Layout
-## 5. Interaction Logic
-## 6. Data Model
-## 7. External Integration
-## 8. Edge Cases
+**Document Structure** (12 sections):
+1. Executive Summary - Purpose, audience, key questions
+2. Business Context - Domain, objectives, decision support
+3. Metrics Specification - Core metrics, support metrics, dimensions
+4. Visualization Components - Component map and details
+5. Page Layout - Grid structure, layout diagram, responsive behavior
+6. Interaction Logic - Filters, cross-filtering, drill-down, tooltips
+7. Data Model - Sources, schema, mock data spec
+8. Theme & Styling - Colors, typography, component styling
+9. Technical Specifications - Tech stack, file structure, performance
+10. Edge Cases & Error Handling - Data scenarios, error states
+11. Acceptance Criteria - Functional and non-functional requirements
+12. Approval - Review checklist, sign-off
+
+**Output Location**: `design-docs/[dashboard-name].md`
+
+**Approval Workflow**:
+```
+Draft → Review (checklist) → Revision (if needed) → Approved → Locked
 ```
 
 ### 2F: Document Review
@@ -314,108 +324,137 @@ Quick review with limited edits:
 - ✅ Add clarifications
 - ❌ Change layout (requires unlock)
 
+**User Confirmation Required**: Design document must be approved before proceeding to Step 3.
+
 ---
 
-## Step 3: Execution Plan Generation
+## Step 3: Development Plan Generation
 
 ### Objective
-Create atomic, testable code generation steps.
+Create detailed development plan from the approved design document.
 
 ### Process
 
 #### 3.1 Parse Design Document
 
-Extract file list from each section:
-- Types from Data Model
-- Components from Visualization
-- Hooks from Interaction Logic
-- Pages from Page Layout
+Extract all required artifacts:
+- Types from Data Model section
+- Components from Visualization Components section
+- Hooks from Interaction Logic section
+- Pages from Page Layout section
+- Mock data specifications from Data Model section
 
 #### 3.2 Dependency Analysis
 
-Build dependency graph:
+Build dependency graph for all files:
+
 ```
-types/sales.ts
+types/index.ts
     ↓
-mock/sales.mock.ts
+data/mockData.ts
     ↓
-components/BarChart.tsx ←──┐
-components/LineChart.tsx   │
-    ↓                      │
-hooks/useChartData.ts ─────┘
+components/KPICard.tsx ←──┐
+components/BarChart.tsx   │
+components/LineChart.tsx  │
+    ↓                     │
+hooks/useChartData.ts ────┘
     ↓
-pages/Dashboard.tsx
+App.tsx
 ```
 
-#### 3.3 Step Decomposition
+#### 3.3 Phase Breakdown
 
-Each file = one step:
+Organize tasks into 4 phases:
+
+| Phase | Tasks | Est. Time |
+|-------|-------|-----------|
+| Foundation | Project setup, types, mock data | 2-3 hours |
+| Components | All chart and UI components | 4-6 hours |
+| Assembly | App.tsx, filters, state | 2-3 hours |
+| QA | Testing, optimization, docs | 2-3 hours |
+
+#### 3.4 Task Decomposition
+
+For each task, define:
 
 ```typescript
-interface ExecutionStep {
-  order: number
-  description: string
-  goal: string
-  input: {
-    designDocSections: string[]
-    dependencyOutputs: number[]
-    templateRef?: string
-  }
-  output: {
-    files: GeneratedFile[]
-    verificationCriteria: string[]
-  }
-  testSpec: TestSpec
-  componentSource: 'template' | 'new'
-  tokenBudget: TokenBudget
+interface DevelopmentTask {
+  id: string                    // e.g., "2.1"
+  name: string                  // e.g., "KPI Card Component"
+  priority: 'P0' | 'P1' | 'P2'  // P0 = critical path
+  estimatedTime: string         // e.g., "1 hour"
+  dependencies: string[]        // Task IDs this depends on
+  subtasks: Subtask[]
+  acceptanceCriteria: string[]
+  output: string[]              // Files produced
 }
 ```
 
-#### 3.4 Test Spec Generation
+#### 3.5 Timeline Generation
 
-Generate quantified assertions:
+Create timeline with milestones:
 
-```typescript
-interface TestSpec {
-  assertions: TestAssertion[]
-  mockData: MockDataConfig
-}
-
-interface TestAssertion {
-  description: string
-  code: string                  // Executable test code
-  expected: string              // Hard-coded expected value
-}
+```
+Day 1: Foundation Complete (M1)
+Day 3: Components Ready (M2)
+Day 4: Dashboard Assembled (M3)
+Day 5: QA Passed (M4)
+Day 5: Delivery (M5)
 ```
 
-Example:
-```typescript
-{
-  description: "Bar chart renders 5 bars for 5 regions",
-  code: "expect(container.querySelectorAll('.bar')).toHaveLength(5)",
-  expected: "5"
-}
-```
+#### 3.6 Quality Gates Definition
+
+Define quality gates for each phase:
+
+| Gate | Criteria |
+|------|----------|
+| Foundation | Types compile, mock data generates |
+| Components | All tests pass, coverage > 90% |
+| Assembly | Integration tests pass, responsive |
+| QA | Performance targets met, docs complete |
+
+#### 3.7 Risk Assessment
+
+Identify and document risks:
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Component complexity | Medium | High | Use templates |
+| Performance issues | Low | High | Profile early |
 
 ### Output
 
-```typescript
-interface ExecutionPlan {
-  id: string
-  summary: string
-  designDocRef: string
-  steps: ExecutionStep[]
-  totalEstimatedTokens: number
-  warnings: string[]
-}
+Generate `dev-plan.md` using `assets/templates/dev-plan-template.md`:
+
+```markdown
+# Development Plan: [Dashboard Name]
+
+## 1. Project Overview
+## 2. Task Breakdown (by phase)
+## 3. Dependency Graph
+## 4. Timeline
+## 5. Resource Allocation
+## 6. Risk Assessment
+## 7. Quality Gates
+## 8. Rollback Plan
 ```
+
+### User Confirmation
+
+Present the development plan for review:
+- [ ] Task breakdown looks complete
+- [ ] Time estimates are reasonable
+- [ ] Dependencies are correct
+- [ ] Quality gates are appropriate
+
+**Proceed to Step 4 only after plan approval.**
 
 ---
 
 ## Step 4: TDD Code Generation
 
 ### Objective
-Generate tested, production-ready code automatically.
+Generate tested, production-ready code following the development plan.
 
 ### TDD Cycle
 
@@ -423,10 +462,36 @@ Generate tested, production-ready code automatically.
 [READ] → [RED] → [GREEN] → [REFACTOR] → [VERIFY] → [CHECKPOINT]
 ```
 
-### Template Path (Matched Components)
+### Phase-by-Phase Execution
 
+#### Phase 1: Foundation
+
+Execute in order:
+1. **Task 1.1**: Project Setup
+   - Initialize Vite + React + TypeScript
+   - Configure Tailwind CSS
+   - Install dependencies
+   - Create folder structure
+
+2. **Task 1.2**: Type Definitions
+   - Define data interfaces
+   - Define component prop types
+   - Define state interfaces
+
+3. **Task 1.3**: Mock Data Generation
+   - Create mock data generator
+   - Generate realistic values per spec
+   - Add data validation
+
+**Checkpoint 1**: Foundation complete, types compile, mock data generates
+
+#### Phase 2: Components
+
+For each component task:
+
+**Template Path** (matched components):
 ```
-1. Read template source
+1. Read template source from assets/chart-components/
 2. Adapt types (replace generics)
 3. Inject theme colors
 4. Write files
@@ -434,8 +499,7 @@ Generate tested, production-ready code automatically.
 6. If fail → fix adaptation (max 2 rounds)
 ```
 
-### New Generation Path
-
+**New Generation Path** (custom components):
 ```
 1. Read specs + dependencies
 2. [RED] Write tests first
@@ -452,8 +516,31 @@ Generate tested, production-ready code automatically.
    - ESLint, Prettier, tsc
 6. [VERIFY] Regression test
    - All previous tests still pass
-7. [CHECKPOINT] Save snapshot
 ```
+
+**Checkpoint 2**: All components complete, tests pass, coverage > 90%
+
+#### Phase 3: Assembly
+
+1. **Task 3.1**: Main Dashboard Component
+   - Create App.tsx layout
+   - Integrate all components
+   - Implement responsive grid
+
+2. **Task 3.2**: Filters and Interactions
+   - Implement filter controls
+   - Add state management
+   - Connect filters to charts
+
+**Checkpoint 3**: Dashboard assembled, integration tests pass
+
+#### Phase 4: QA
+
+1. **Task 4.1**: Integration Testing
+2. **Task 4.2**: Performance Optimization
+3. **Task 4.3**: Documentation
+
+**Checkpoint 4**: QA complete, ready for delivery
 
 ### Repair Priority
 
