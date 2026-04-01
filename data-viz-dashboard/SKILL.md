@@ -80,6 +80,29 @@ The library includes metric relationship diagrams:
 
 ## Core Workflow: 6-Step Guided Process
 
+### ⚠️ CRITICAL: Sequential Execution Required
+
+**ALL steps MUST be executed in order. Never skip any step.**
+
+```
+Step 0 → Step 1 → Step 2 → Step 3 → Step 4 → Step 5
+```
+
+**Enforcement Rules**:
+1. Each step MUST complete and receive user confirmation before proceeding
+2. If user requests changes in any step, complete that step first, then proceed to next
+3. NEVER jump from Step 0/1 directly to Step 3/4/5
+4. Step 2 (Design + Wireframe) is MANDATORY - it cannot be skipped even if metrics are clear
+5. Track progress: Before starting any step, verify all previous steps are completed
+
+**Step Completion Checklist** (must be verified before proceeding):
+- [ ] Step 0: UserIntent captured and confirmed
+- [ ] Step 1: MetricSystem defined and confirmed
+- [ ] Step 2: DesignDoc created and approved
+- [ ] Step 3: DevPlan generated and approved
+- [ ] Step 4: Code generated with tests passing
+- [ ] Step 5: Deliverables packaged
+
 ### Step 0: Socratic Dialogue (Requirement Gathering)
 
 **Goal**: Transform vague ideas into structured requirements through guided questioning.
@@ -99,6 +122,8 @@ The library includes metric relationship diagrams:
 - Display format preference? (single-page/multi-page/big-screen)
 
 **Output**: Structured `UserIntent` summary
+
+**⚠️ After Step 0**: MUST proceed to Step 1. Do not skip to Step 2 or later.
 
 ### Step 1: Story + Metrics Definition
 
@@ -123,9 +148,17 @@ interface MockDataSpec {
 }
 ```
 
+**⚠️ After Step 1**: MUST proceed to Step 2 (Design + Wireframe).
+- Even if metrics and layout preferences are discussed in Step 1, Step 2 is still REQUIRED
+- Step 2 creates the formal design document with wireframe and component mapping
+- User modifications in Step 1 do NOT satisfy Step 2 requirements
+- NEVER skip Step 2 regardless of how detailed Step 1 discussions were
+
 ### Step 2: Design + Wireframe
 
 **Goal**: Create visual layout specification with user confirmation.
+
+**⚠️ MANDATORY STEP - This step CANNOT be skipped.**
 
 **Sub-steps**:
 1. **2A**: Collect layout preferences (resolution/framework/navigation/theme)
@@ -146,6 +179,10 @@ After wireframe confirmation, generate a comprehensive design document using `as
 - User must approve before proceeding to development
 
 **Output**: `DesignDoc` (locked) stored as `design-docs/[dashboard-name].md`
+
+**⚠️ After Step 2**: MUST proceed to Step 3 (Development Plan).
+- Design document approval is required before any code generation
+- Do not proceed to Step 4 without completing Step 3
 
 ### Step 3: Development Plan Generation
 
@@ -314,3 +351,28 @@ Copy or adapt for output:
 4. **Template Priority**: Reuse built-in templates when possible
 5. **Context Isolation**: Each step only carries necessary context
 6. **Checkpoint Rollback**: Support recovery from any step
+7. **Sequential Execution**: ALL steps must be executed in order - NO SKIPPING
+
+## Workflow State Tracking
+
+At the start of each response, display current progress:
+
+```
+📊 Dashboard Generation Progress
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Step 0: Socratic Dialogue (completed)
+✅ Step 1: Story + Metrics (completed)
+🔄 Step 2: Design + Wireframe (in progress)
+⬜ Step 3: Development Plan
+⬜ Step 4: TDD Code Generation
+⬜ Step 5: Delivery
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**State Tracking Rules**:
+- Always show progress indicator at start of response
+- Mark current step as 🔄 (in progress)
+- Mark completed steps as ✅
+- Mark pending steps as ⬜
+- Never mark a step complete until user confirms
+- If user requests to go back, update state accordingly

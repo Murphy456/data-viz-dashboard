@@ -2,6 +2,55 @@
 
 Detailed instructions for executing the 6-step data visualization dashboard generation workflow.
 
+## ⚠️ CRITICAL: Sequential Execution Enforcement
+
+**ALL steps MUST be executed in order. Skipping steps is NOT allowed.**
+
+### Step Transition Rules
+
+```
+Step 0 → Step 1 → Step 2 → Step 3 → Step 4 → Step 5
+  ↓        ↓        ↓        ↓        ↓        ↓
+UserIntent → MetricSystem → DesignDoc → DevPlan → Code → Delivery
+```
+
+### Before Starting Any Step, Verify:
+
+```typescript
+function canProceedToStep(currentStep: number): boolean {
+  for (let i = 0; i < currentStep; i++) {
+    if (!stepCompleted[i]) {
+      return false // Previous step not completed
+    }
+  }
+  return true
+}
+```
+
+### Common Mistakes to Avoid:
+
+| Mistake | Why It's Wrong | Correct Behavior |
+|---------|----------------|------------------|
+| Skip Step 2 after detailed Step 1 | Design doc is required for code generation | Always run Step 2, even if layout was discussed |
+| Jump from Step 1 to Step 4 | Missing design and plan phases | Complete Steps 2 and 3 first |
+| Skip user confirmation | User validation is required at each step | Always get explicit confirmation |
+| Merge Step 1 and Step 2 | Different outputs and purposes | Execute separately with confirmations |
+
+### Step Completion Indicators:
+
+Each step has required outputs that MUST be produced before proceeding:
+
+| Step | Required Output | Verification |
+|------|-----------------|--------------|
+| 0 | UserIntent summary | User confirms intent captured correctly |
+| 1 | MetricSystem with MockDataSpec | User confirms metrics and mock specs |
+| 2 | DesignDoc (design-docs/*.md) | User approves design document |
+| 3 | DevPlan (dev-plan.md) | User approves development plan |
+| 4 | Complete project with tests | All tests pass, quality gates met |
+| 5 | Packaged deliverables | README, test report, runnable project |
+
+---
+
 ## Step 0: Socratic Dialogue
 
 ### Objective
@@ -211,12 +260,37 @@ interface MetricSystem {
 }
 ```
 
+### ⚠️ Step 1 Completion Requirements
+
+Before proceeding to Step 2, ensure:
+- [ ] Story narrative generated
+- [ ] Core metrics defined (1-3) with formulas
+- [ ] Support metrics defined with mock specs
+- [ ] Dimensions defined with values
+- [ ] Data granularity determined
+- [ ] User confirmed the MetricSystem
+
+**IMPORTANT**: Even if user discusses layout preferences during Step 1, you MUST still execute Step 2. Step 1 output is MetricSystem (metrics and data), Step 2 output is DesignDoc (layout and components). These are different artifacts.
+
 ---
 
 ## Step 2: Design + Wireframe
 
 ### Objective
 Create visual layout specification with user confirmation.
+
+### ⚠️ MANDATORY STEP
+
+**This step CANNOT be skipped.** Even if:
+- User discussed layout preferences in Step 1
+- User provided wireframe sketches earlier
+- The metrics seem straightforward
+
+Step 2 is required because:
+1. It formalizes the design into a document
+2. It maps metrics to specific chart components
+3. It defines interactions and behaviors
+4. It requires user approval before development
 
 ### 2A: Layout Preferences
 
@@ -325,6 +399,18 @@ Quick review with limited edits:
 - ❌ Change layout (requires unlock)
 
 **User Confirmation Required**: Design document must be approved before proceeding to Step 3.
+
+### ⚠️ Step 2 Completion Requirements
+
+Before proceeding to Step 3, ensure:
+- [ ] Layout preferences collected (2A)
+- [ ] Components mapped to metrics (2B)
+- [ ] Wireframe generated and shown (2C)
+- [ ] User confirmed wireframe (2D)
+- [ ] Design document generated (2E)
+- [ ] User approved design document (2F)
+
+**Output Verification**: `design-docs/[dashboard-name].md` must exist and be approved.
 
 ---
 
