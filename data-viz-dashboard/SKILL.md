@@ -46,6 +46,22 @@ Trigger this skill when users request:
 | Conversion stages | `FunnelChart.tsx` | Marketing funnel, user journey |
 | Correlation | `ScatterChart.tsx` | Price vs sales, user behavior |
 | KPI summary | `KPICard.tsx` | Total revenue, conversion rate |
+| Distribution analysis | `HistogramChart.tsx` | Age distribution, price ranges |
+| Statistical summary | `BoxPlotChart.tsx` | Salary ranges, performance quartiles |
+| Combined trend+comparison | `BarLineChart.tsx` | Sales volume + growth rate |
+
+### Extended Chart Types
+
+| Chart Type | Component | Best For | Data Requirements |
+|------------|-----------|----------|-------------------|
+| **BarLineChart** | `BarLineChart.tsx` | Compare volume + trend simultaneously | 1 categorical + 2 numerical (different scales) |
+| **ScatterPlot** | `ScatterChart.tsx` | Correlation between 2 variables | 2 numerical variables |
+| **BubbleChart** | `ScatterChart.tsx` | Correlation with size dimension | 3 numerical variables |
+| **Histogram** | `HistogramChart.tsx` | Frequency distribution | 1 numerical variable |
+| **BoxPlot** | `BoxPlotChart.tsx` | Statistical distribution (quartiles, outliers) | 1 categorical + 1 numerical |
+| **Heatmap** | `HeatmapChart.tsx` | 2D density, correlation matrix | 2 categorical + 1 numerical |
+| **RadarChart** | `RadarChart.tsx` | Multi-dimensional comparison | 1 categorical + 3+ numerical |
+| **Treemap** | `TreemapChart.tsx` | Hierarchical part-to-whole | Hierarchical categories + 1 numerical |
 
 ## Business Metrics Library
 
@@ -121,6 +137,78 @@ Step 0 → Step 1 → Step 2 → Step 3 → Step 4 → Step 5
 - What decisions will this inform?
 - Display format preference? (single-page/multi-page/big-screen)
 
+**Display Format Options**:
+
+| Format | Description | Best For |
+|--------|-------------|----------|
+| Single-page | One screen, all info visible | Executive summary, team dashboards |
+| Multi-page | Tab navigation, multiple views | Detailed analytics, drill-down |
+| Big-screen | Large display, dark theme | NOC, operations center, presentations |
+
+**Big-Screen Layout Frameworks** (when user selects big-screen format):
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Layout A: Left 1 + Center Map + Right 1                     │
+├──────────┬─────────────────────────────┬──────────┤
+│          │                             │          │
+│  KPIs    │       MAP / CENTER          │  KPIs    │
+│  Charts  │       VISUALIZATION         │  Charts  │
+│          │                             │          │
+│  (1 col) │         (3 cols)            │  (1 col) │
+└──────────┴─────────────────────────────┴──────────┘
+```
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Layout B: Left 2 + Center Map + Right 2                     │
+├────────────────┬─────────────────────┬────────────────┤
+│                │                     │                │
+│  KPIs          │    MAP / CENTER     │  KPIs          │
+│  Charts (1)    │    VISUALIZATION    │  Charts (1)    │
+│  Charts (2)    │      (2 cols)       │  Charts (2)    │
+│                │                     │                │
+│  (2 cols)      │                     │  (2 cols)      │
+└────────────────┴─────────────────────┴────────────────┘
+```
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Layout C: Left 1 + Center 2 + Right 1                       │
+├──────────┬───────────────────────────┬──────────┤
+│          │                           │          │
+│  KPIs    │   MAIN CHARTS             │  KPIs    │
+│  Charts  │   (Multiple charts)       │  Charts  │
+│          │                           │          │
+│  (1 col) │        (2 cols)           │  (1 col) │
+└──────────┴───────────────────────────┴──────────┘
+```
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Layout D: Left-Center-Right Equal (1-1-1)                   │
+├──────────────┬──────────────┬──────────────┤
+│              │              │              │
+│  Charts      │   Charts     │   Charts     │
+│  Group A     │   Group B    │   Group C    │
+│              │              │              │
+│  (1 col)     │   (1 col)    │   (1 col)    │
+└──────────────┴──────────────┴──────────────┘
+```
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ Layout E: Top Banner + Left-Right Split                     │
+├─────────────────────────────────────────────────────────────┤
+│                    TOP BANNER / TITLE                       │
+├─────────────────────────────┬───────────────────────────────┤
+│                             │                               │
+│    LEFT CHARTS              │    RIGHT CHARTS               │
+│    (2 cols)                 │    (2 cols)                   │
+│                             │                               │
+└─────────────────────────────┴───────────────────────────────┘
+```
+
 **Output**: Structured `UserIntent` summary
 
 **⚠️ After Step 0**: MUST proceed to Step 1. Do not skip to Step 2 or later.
@@ -135,8 +223,101 @@ Step 0 → Step 1 → Step 2 → Step 3 → Step 4 → Step 5
 3. Define support metrics with mock specifications
 4. Map data dimensions and granularity
 5. Generate data source schema
+6. **Output metrics checklist and PRD document for user confirmation**
 
-**Output**: `MetricSystem` with `MockDataSpec` for each metric
+**Output Artifacts**:
+
+1. **Metrics Checklist** (`metrics-checklist.md`):
+```markdown
+# Metrics Checklist: [Dashboard Name]
+
+## Core Metrics (KPIs)
+| Metric | Definition | Formula | Unit | Data Source |
+|--------|------------|---------|------|-------------|
+| [Metric 1] | [Definition] | [Formula] | [Unit] | [Source] |
+| [Metric 2] | [Definition] | [Formula] | [Unit] | [Source] |
+| [Metric 3] | [Definition] | [Formula] | [Unit] | [Source] |
+
+## Support Metrics
+| Metric | Definition | Unit | Purpose |
+|--------|------------|------|---------|
+| [Metric 4] | [Definition] | [Unit] | [Context purpose] |
+
+## Dimensions
+| Dimension | Type | Values | Hierarchy |
+|-----------|------|--------|-----------|
+| [Dim 1] | categorical/temporal/geographic | [values] | [if applicable] |
+
+## Mock Data Specifications
+| Metric | Range | Distribution | Typical Value |
+|--------|-------|--------------|---------------|
+| [Metric 1] | [min, max] | normal/beta/uniform | [value] |
+
+---
+✅ Please confirm the metrics above are correct before proceeding.
+```
+
+2. **PRD Document** (`prd-[dashboard-name].md`):
+```markdown
+# Product Requirements Document: [Dashboard Name]
+
+## 1. Overview
+- **Product Name**: [Name]
+- **Target Users**: [From Step 0]
+- **Business Domain**: [Domain]
+- **Primary Goal**: [What decisions this supports]
+
+## 2. Business Context
+- **Problem Statement**: [What problem does this solve]
+- **Success Criteria**: [How to measure success]
+- **Stakeholders**: [Who will use this]
+
+## 3. Metrics Specification
+### Core KPIs
+1. **[KPI 1]**: [Definition and why it matters]
+2. **[KPI 2]**: [Definition and why it matters]
+3. **[KPI 3]**: [Definition and why it matters]
+
+### Support Metrics
+- [List with purposes]
+
+## 4. Data Requirements
+- **Data Sources**: [Where data comes from]
+- **Update Frequency**: [Real-time/Daily/Weekly]
+- **Data Granularity**: [Hourly/Daily/Weekly/Monthly]
+- **Historical Range**: [How far back]
+
+## 5. Layout Preference
+- **Display Format**: [Single-page/Multi-page/Big-screen]
+- **Layout Framework**: [If big-screen, which layout]
+- **Resolution**: [Target resolution]
+
+## 6. Functional Requirements
+- [ ] Display [KPI 1] with trend indicator
+- [ ] Compare [dimension] across [metrics]
+- [ ] Filter by [dimensions]
+- [ ] [Other requirements from dialogue]
+
+## 7. Non-Functional Requirements
+- **Performance**: Page load < 3s
+- **Accessibility**: WCAG 2.1 AA
+- **Browser Support**: Chrome, Firefox, Safari, Edge
+
+## 8. Acceptance Criteria
+- [ ] All core metrics displayed correctly
+- [ ] Charts render with mock data
+- [ ] Filters work as expected
+- [ ] Responsive on target resolution
+
+---
+**Status**: Draft - Awaiting User Confirmation
+**Created**: [Date]
+```
+
+**User Confirmation Required**:
+- Present metrics checklist and PRD document
+- User must approve both before proceeding to Step 2
+- Allow revisions: user can add/remove/modify metrics
 
 **Mock Spec Structure**:
 ```typescript
@@ -288,6 +469,12 @@ Copy or adapt for output:
   - `ScatterChart.tsx` - Scatter/Bubble variants
   - `FunnelChart.tsx` - Conversion funnel
   - `KPICard.tsx` - KPI with trend indicator
+  - `BarLineChart.tsx` - Combined bar + line (dual axis)
+  - `HistogramChart.tsx` - Frequency distribution
+  - `BoxPlotChart.tsx` - Box and whisker plot
+  - `HeatmapChart.tsx` - 2D density visualization
+  - `RadarChart.tsx` - Multi-dimensional comparison
+  - `TreemapChart.tsx` - Hierarchical part-to-whole
 - `assets/themes/` - Color theme configurations
 
 ## Technical Stack
@@ -329,10 +516,13 @@ Copy or adapt for output:
 **Chart Component Selection** (generate ALL that apply):
 - **Trend analysis** → LineChart.tsx + AreaChart.tsx
 - **Comparison** → BarChart.tsx
-- **Composition/Part-to-whole** → PieChart.tsx
+- **Composition/Part-to-whole** → PieChart.tsx, Treemap.tsx
 - **Conversion/Funnel** → FunnelChart.tsx
 - **Correlation** → ScatterChart.tsx
 - **KPI summary** → KPICard.tsx
+- **Distribution** → HistogramChart.tsx, BoxPlotChart.tsx
+- **Combined metrics** → BarLineChart.tsx (e.g., sales volume + growth rate)
+- **Multi-dimensional** → RadarChart.tsx, HeatmapChart.tsx
 
 ## Quality Standards
 

@@ -10,12 +10,14 @@ Rules for mapping metrics and dimensions to appropriate chart types.
 |-----------------|---------------|-------------|----------|
 | **Trend** | Line Chart | Area Chart | Show change over time |
 | **Comparison** | Bar Chart | Column Chart | Compare categories |
-| **Composition** | Pie Chart | Donut, Stacked Bar | Show part-to-whole |
-| **Distribution** | Histogram | Box Plot, Scatter | Show data spread |
+| **Composition** | Pie Chart | Donut, Stacked Bar, Treemap | Show part-to-whole |
+| **Distribution** | Histogram | Box Plot, Violin Plot | Show data spread |
 | **KPI** | KPI Card | Gauge | Single value display |
 | **Correlation** | Scatter Plot | Bubble Chart | Show relationships |
 | **Ranking** | Horizontal Bar | Column Chart | Ordered comparison |
 | **Flow** | Funnel | Sankey | Process stages |
+| **Combined** | Bar + Line | Dual Axis | Volume + rate together |
+| **Multi-dimensional** | Radar | Parallel Coordinates | Compare multiple metrics |
 
 ### By Dimension Type
 
@@ -246,6 +248,113 @@ Rules for mapping metrics and dimensions to appropriate chart types.
 - Correlation matrix
 - Geographic density
 
+### 11. Bar + Line Chart (`barline.chart.json`)
+
+**Match Rules**:
+```json
+{
+  "metricTypes": ["trend", "comparison"],
+  "dimensionTypes": ["categorical", "temporal"],
+  "maxDimensions": 1,
+  "minMetrics": 2,
+  "maxMetrics": 2,
+  "requiresDifferentScales": true
+}
+```
+
+**Variants**:
+- `basic` - Bar + single line
+- `dual-axis` - Left and right Y-axes
+- `multi-line` - Bar + multiple lines
+
+**Best For**:
+- Sales volume (bar) + Growth rate (line)
+- Revenue (bar) + Profit margin (line)
+- Traffic (bar) + Conversion rate (line)
+
+### 12. Histogram (`histogram.chart.json`)
+
+**Match Rules**:
+```json
+{
+  "metricTypes": ["distribution"],
+  "dimensionTypes": ["continuous"],
+  "maxDimensions": 1,
+  "maxMetrics": 1
+}
+```
+
+**Variants**:
+- `basic` - Single distribution
+- `overlaid` - Compare multiple distributions
+- `stacked` - Cumulative distribution
+
+**Best For**:
+- Age distribution of users
+- Price range analysis
+- Response time distribution
+- Score distribution
+
+### 13. Box Plot (`boxplot.chart.json`)
+
+**Match Rules**:
+```json
+{
+  "metricTypes": ["distribution", "comparison"],
+  "dimensionTypes": ["categorical"],
+  "minDimensions": 1,
+  "maxMetrics": 1
+}
+```
+
+**Shows**:
+- Median (center line)
+- Q1/Q3 (box edges)
+- Whiskers (1.5 * IQR)
+- Outliers (individual points)
+
+**Best For**:
+- Salary ranges by department
+- Test scores by class
+- Performance comparison with outliers
+- Statistical process control
+
+### 14. Treemap (`treemap.chart.json`)
+
+**Match Rules**:
+```json
+{
+  "metricTypes": ["composition", "hierarchical"],
+  "dimensionTypes": ["hierarchical"],
+  "minDimensions": 2,
+  "maxMetrics": 1
+}
+```
+
+**Best For**:
+- Budget by department → team
+- Sales by region → product
+- File system usage
+- Market share hierarchy
+
+### 15. Radar Chart (`radar.chart.json`)
+
+**Match Rules**:
+```json
+{
+  "metricTypes": ["comparison"],
+  "dimensionTypes": ["categorical"],
+  "minDimensions": 3,
+  "maxDimensions": 8,
+  "maxMetrics": 3
+}
+```
+
+**Best For**:
+- Multi-dimensional comparison
+- Skill assessment
+- Performance across categories
+
 ## Component Resolution Algorithm
 
 ```typescript
@@ -303,7 +412,8 @@ START
   ├─ Time dimension present?
   │   ├─ YES + Single metric → Line Chart
   │   ├─ YES + Multiple metrics → Multi-Line or Area
-  │   └─ YES + Cumulative → Stacked Area
+  │   ├─ YES + Cumulative → Stacked Area
+  │   └─ YES + Volume + Rate (different scales) → Bar + Line Chart
   │
   ├─ Categorical comparison?
   │   ├─ Few categories (<5) → Column Chart
@@ -313,7 +423,13 @@ START
   ├─ Part-to-whole?
   │   ├─ Few categories (<6) → Pie/Donut
   │   ├─ Many categories → Treemap
+  │   ├─ Hierarchical categories → Treemap
   │   └─ Over time → Stacked Area
+  │
+  ├─ Distribution analysis?
+  │   ├─ Single variable frequency → Histogram
+  │   ├─ Compare distributions across categories → Box Plot
+  │   └─ Statistical summary needed → Box Plot
   │
   ├─ Correlation between variables?
   │   ├─ Two variables → Scatter Plot
@@ -322,9 +438,12 @@ START
   ├─ Sequential stages?
   │   └─ YES → Funnel
   │
-  └─ Multi-dimensional comparison?
-      ├─ 3-8 dimensions → Radar Chart
-      └─ 2 dimensions + density → Heatmap
+  ├─ Multi-dimensional comparison?
+  │   ├─ 3-8 dimensions → Radar Chart
+  │   └─ 2 dimensions + density → Heatmap
+  │
+  └─ Need volume + trend together?
+      └─ YES → Bar + Line Chart (dual axis)
 ```
 
 ## Interaction Patterns by Chart Type
